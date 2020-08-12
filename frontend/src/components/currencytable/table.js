@@ -8,8 +8,8 @@ const Table = ({ crypto, loading }) => {
       return (
         <Row
           price={crypto[k].price}
+          key={crypto[k].price}
           title={crypto[k].title}
-          key={crypto[k].title}
         />
       );
     });
@@ -21,9 +21,7 @@ const Table = ({ crypto, loading }) => {
     return (
       <table>
         <thead></thead>
-        <tbody>
-          <tr></tr>
-        </tbody>
+        <tbody>{renderCrypto()}</tbody>
       </table>
     );
   }

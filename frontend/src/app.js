@@ -4,6 +4,7 @@ import FiatSelector from "./components/fiatselector/selector";
 import Table from "./components/currencytable/table";
 
 const App = () => {
+  //const {crypto,setCrypto}=useState({});
   const [crypto, setCrypto] = useState({
     btc: { title: "BTC" },
     eth: { title: "Ether" },
@@ -11,32 +12,30 @@ const App = () => {
   });
   const [fiat, setFiat] = useState(["gbp", "bgn", "eur"]);
   const [loading, setLoading] = useState(false);
-  const [btc, setBtc] = useState({});
 
-  const setAttribute = async (property, value) => {
-    let newObj = crypto;
-    let newProperty = { ...crypto[property] };
-    newProperty.price = value["price"];
-    newObj[property] = newProperty;
-    setCrypto(newObj);
+  const setAttribute = async (key, value) => {
+    setLoading(true);
+    setCrypto((prevState) => ({
+      ...prevState,
+      [key]: { ...crypto[key], price: value["price"] },
+    }));
+    setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
     const fetchCrypto = async () => {
-      for (const key in crypto) {
-        if (crypto.hasOwnProperty(key)) {
-          const cryptoPromise = await fetch(
-            `http://localhost:8080/price/${key}`
-          );
+      for (const c in crypto) {
+        if (crypto.hasOwnProperty(c)) {
+          const cryptoPromise = await fetch(`http://localhost:8080/price/${c}`);
           const price = await cryptoPromise.json();
-          setAttribute(key, price);
+          setAttribute(c, price);
         }
       }
     };
+
     fetchCrypto();
     setLoading(false);
-    console.log(crypto["btc"]);
   }, []);
 
   return (
