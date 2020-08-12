@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Row from "../tablerow/tablerow";
+import CalculatorContext from "../../context/calculator/calculatorContext";
 
-const Table = ({ crypto, loading }) => {
+const COINS = {
+  btc: { title: "BTC" },
+  eth: { title: "Ether" },
+  ae: { title: "ae" },
+};
+const Table = ({ loading }) => {
+  const calculatorContext = useContext(CalculatorContext);
+  const { crypto } = calculatorContext;
+  console.log(crypto);
   const renderCrypto = () => {
     const keys = Object.keys(crypto);
     return keys.map((k) => {
@@ -14,6 +23,14 @@ const Table = ({ crypto, loading }) => {
       );
     });
   };
+
+  useEffect(() => {
+    for (const key in COINS) {
+      if (COINS.hasOwnProperty(key)) {
+        calculatorContext.fetchCrypto(COINS[key], key);
+      }
+    }
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;

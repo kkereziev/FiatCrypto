@@ -6,28 +6,19 @@ import { GET_CRYPTO, GET_FIAT, SET_LOADING } from "../types";
 
 const CalculatorState = (props) => {
   const initialState = {
-    crypto: {
-      btc: { title: "BTC" },
-      eth: { title: "Ether" },
-      ae: { title: "ae" },
-    },
+    crypto: {},
     loading: false,
+    fiat: {},
   };
 
   const [state, dispatch] = useReducer(CalculatorReducer, initialState);
 
   //fetch crypto
-  const fetchCrypto = async () => {
-    setLoading(true);
-    for (const c in crypto) {
-      if (crypto.hasOwnProperty(c)) {
-        const cryptoPromise = await fetch(`http://localhost:8080/price/${c}`);
-        const price = await cryptoPromise.json();
-        //setAttribute(c, price);
-        dispatch({ type: GET_CRYPTO, payload: { c, price } });
-      }
-    }
-    setLoading(false);
+  const fetchCrypto = async (title, key) => {
+    const cryptoPromise = await fetch(`http://localhost:8080/price/${key}`);
+    const price = await cryptoPromise.json();
+    //setAttribute(c, price);
+    dispatch({ type: GET_CRYPTO, payload: { title, price, key } });
   };
 
   //setAtribute
@@ -39,6 +30,7 @@ const CalculatorState = (props) => {
       value={{
         crypto: state.crypto,
         loading: state.loading,
+        fiat: state.fiat,
         fetchCrypto,
       }}
     >
