@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./fiatsselector.module.css";
 import CalculatorContext from "../../context/calculator/calculatorContext";
+
 const OPTIONS = ["USD", "BGN", "EUR", "GBP"];
 const FiatSelector = () => {
   const calculatorContext = useContext(CalculatorContext);
-  const { currentFiat, fiat } = calculatorContext;
-  console.log(fiat);
+  const { currentFiat, fetchFiat, changeFiat } = calculatorContext;
+
   const rednerOptions = () => {
     return OPTIONS.map((opt) => {
       return (
@@ -18,12 +19,12 @@ const FiatSelector = () => {
 
   useEffect(() => {
     for (const value of OPTIONS) {
-      calculatorContext.fetchFiat(value);
+      fetchFiat(value);
     }
   }, []);
 
   const onChangeOption = (e) => {
-    calculatorContext.changeFiat(e.target.value);
+    changeFiat(e.target.value);
   };
   return (
     <div>

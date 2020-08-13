@@ -1,7 +1,8 @@
 import { GET_CRYPTO, GET_FIAT, SET_LOADING, CHANGE_FIAT } from "../types";
 
 export default (state, action) => {
-  const { key, title, price, value } = action.payload;
+  const { key, title, price } = action.payload;
+
   switch (action.type) {
     case GET_CRYPTO:
       return {
@@ -15,11 +16,9 @@ export default (state, action) => {
           },
         },
       };
-    case SET_LOADING:
-      return { ...state, loading: action.payload };
     case GET_FIAT:
       return { ...state, fiat: { ...state.fiat, [key]: price["price"] } };
     case CHANGE_FIAT:
-      return { ...state, currentFiat: value };
+      return { ...state, currentFiat: action.payload };
   }
 };
