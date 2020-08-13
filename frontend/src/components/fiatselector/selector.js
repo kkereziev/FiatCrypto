@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./fiatsselector.module.css";
-class FiatSelector extends Component {
-  state = {
-    options: ["USD", "BGN", "EUR", "GBP"],
-    option: "USD",
-  };
-
-  rednerOptions = () => {
-    return this.state.options.map((opt) => {
+import CalculatorContext from "../../context/calculator/calculatorContext";
+const OPTIONS = ["USD", "BGN", "EUR", "GBP"];
+const FiatSelector = () => {
+  const calculatorContext = useContext(CalculatorContext);
+  const { currentFiat, fiat } = calculatorContext;
+  console.log(fiat);
+  const rednerOptions = () => {
+    return OPTIONS.map((opt) => {
       return (
         <option key={opt} value={opt}>
           {opt}
@@ -16,25 +16,27 @@ class FiatSelector extends Component {
     });
   };
 
-  onChangeOption = (e) => {
-    this.setState({
-      option: e.target.value,
-    });
+  useEffect(() => {
+    for (const value of OPTIONS) {
+      calculatorContext.fetchFiat(value);
+    }
+  }, []);
+
+  const onChangeOption = (e) => {
+    calculatorContext.changeFiat(e.target.value);
   };
-  render() {
-    return (
-      <div>
-        <select
-          required
-          className={styles["select-css"]}
-          value={this.state.option}
-          onChange={this.onChangeOption}
-        >
-          {this.rednerOptions()}
-        </select>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <select
+        required
+        className={styles["select-css"]}
+        value={currentFiat}
+        onChange={onChangeOption}
+      >
+        {rednerOptions()}
+      </select>
+    </div>
+  );
+};
 
 export default FiatSelector;

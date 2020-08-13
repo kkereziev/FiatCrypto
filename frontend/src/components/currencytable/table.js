@@ -10,7 +10,6 @@ const COINS = {
 const Table = ({ loading }) => {
   const calculatorContext = useContext(CalculatorContext);
   const { crypto } = calculatorContext;
-  console.log(crypto);
   const renderCrypto = () => {
     const keys = Object.keys(crypto);
     return keys.map((k) => {
